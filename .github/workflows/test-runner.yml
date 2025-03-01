@@ -24,4 +24,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         export PYTHONPATH=$PYTHONPATH:${{github.workspace}}
-        pytest -s tests/part_01/test_users.py
+
+    - name: Run tests
+      run: |
+        pytest -s tests/part_01/test_users.py --junitxml=results.xml
+
+    - name: Create Test Summary
+      uses: test-summary/action@dist
+      if: success() || failure()
+      with:
+        path: results.xml
